@@ -11,14 +11,19 @@ const blogSchema = new Schema<TBlog>(
       type: String,
       required: true,
     },
+    category: {
+      type: String,
+      enum: ['Programming', 'Education', 'Science'],
+      required: true,
+    },
     author: {
       type: Schema.Types.ObjectId,
       ref: 'User',
       required: true,
     },
-    isPublished: {
-      type: Boolean,
-      default: true,
+    image: {
+      type: String,
+      default: 'n/a',
     },
   },
   {

@@ -1,93 +1,72 @@
-import AppError from '../../error/AppError';
+import { StatusCodes } from 'http-status-codes';
 import catchAsync from '../../utils/catchAsync';
-import { BlogServices } from './blog.service';
+import { BlogService } from './blog.service';
+import { sendResponse } from '../../utils/sendResponse';
+import AppError from '../../error/AppError';
+
 
 const createBlog = catchAsync(async (req, res) => {
-  const userId = req.user?.id;
-  const result = await BlogServices.createBlogIntoDB(req.body, userId);
-  const blogPublisherDetails = await result.populate<{
-    author: { name: string; email: string };
-  }>('author', 'name email');
-  const { _id, title, content, author } = blogPublisherDetails.toObject();
-  const { name, email } = author;
+  const user = req?.user;
+  
+  if (!user) {
+    throw new AppError(StatusCodes.UNAUTHORIZED, 'User not authenticated');
+  }
+  const blogData = { ...req?.body, author:user?.id};
 
-  res.status(200).json({
-    success: true,
+  const result = await BlogService.createBlog(blogData);
+  sendResponse(res, {
+    statusCode: StatusCodes.CREATED,
     message: 'Blog created successfully',
-    data: {
-      _id,
-      title,
-      content,
-      author: { name, email },
-    },
+    data: result,
   });
 });
+
+const getBlogById = catchAsync(async (req, res) => {
+  const result = await BlogService.getSingleBlog(req.params.id);
+  sendResponse(res, {
+    statusCode: StatusCodes.OK,
+    message: 'Blog retrieved successfully',
+    data: result,
+  });
+});
+
 const updateBlog = catchAsync(async (req, res) => {
-  const id = req.params.id;
-  const updatedData = req.body;
+  const { id } = req.params;
+  const { _id, role } = req.user;
 
-  const result = await BlogServices.updateBlogFromDB(id, updatedData);
-  if (!result) {
-    return res.status(404).json({
-      success: false,
-      message: 'Blog not found',
-    });
-  }
-
-  const blogPublisherDetails = await result?.populate('author', 'name email');
-
-  const { _id, title, content, author } = blogPublisherDetails.toObject();
-  const { name, email } = author;
-
-  res.status(200).json({
-    success: true,
+  const result = await BlogService.updateBlog(id, req.body, _id, role);
+  sendResponse(res, {
+    statusCode: StatusCodes.OK,
     message: 'Blog updated successfully',
-    data: {
-      _id,
-      title,
-      content,
-      author: { name, email },
-    },
+    data: result,
   });
 });
+
 const deleteBlog = catchAsync(async (req, res) => {
-  const id = req.params.id;
-  const result = await BlogServices.deleteBlogIntoDb(id);
-  if (!result) {
-    throw new AppError(404, 'Blog not found');
-  }
+  const { id } = req.params;
+  const { _id, role } = req.user;
 
-  const blogPublisherDetails = await result?.populate('author', 'name email');
-
-  const { _id, title, content, author } = blogPublisherDetails.toObject();
-  const { name, email } = author;
-
-  res.status(200).json({
-    success: true,
+  const result = await BlogService.deleteBlog(id, _id, role);
+  sendResponse(res, {
+    statusCode: StatusCodes.OK,
     message: 'Blog deleted successfully',
-    data: {
-      _id,
-      title,
-      content,
-      author: { name, email },
-    },
-  });
-});
-const getAllBlogs = catchAsync(async (req, res) => {
-  const blogs = await BlogServices.getAllBlogsIntoDB(req.query);
-
-
-  res.status(200).json({
-    success: true,
-    message: 'Blogs fetched successfully',
-    statusCode: 200,
-    data: blogs,
+    data: result,
   });
 });
 
-export const BlogControllers = {
+const getAllBlogs = catchAsync(async (_, res) => {
+  const result = await BlogService.getAllBlogs();
+  sendResponse(res, {
+    statusCode: StatusCodes.OK,
+    message: 'Blogs retrieved successfully',
+    data: result,
+  });
+});
+
+export const BlogController = {
   createBlog,
+  getBlogById,
   updateBlog,
   deleteBlog,
-  getAllBlogs
+  getAllBlogs,
 };
