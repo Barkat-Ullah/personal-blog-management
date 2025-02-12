@@ -26,7 +26,7 @@ const updateBlog = async (
     throw new AppError(404, 'Blog not found');
   }
 
-  if (blog.author.toString() !== userId && userRole !== 'admin') {
+  if (blog?.author?.toString() !== userId && userRole !== 'admin') {
     throw new AppError(403, 'Unauthorized: You can only edit your own blog');
   }
 

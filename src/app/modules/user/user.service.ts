@@ -27,8 +27,7 @@ const loginUserIntoDB = async (payload: ILoginUser) => {
     throw new AppError(401, 'This user is not found');
   }
 
-  const { _id, role, } = isUserExists;
-
+  const { _id, role } = isUserExists;
 
   const isPasswordMatched = await bcrypt.compare(
     payload?.password,
@@ -46,9 +45,7 @@ const loginUserIntoDB = async (payload: ILoginUser) => {
   const accessToken = jwt.sign(user, config.jwt_access_secret as string, {
     expiresIn: config.jwt_access_expires_in as string,
   });
-  return {
-    accessToken,
-  };
+  return { user, accessToken };
 };
 
 export const UserServices = {

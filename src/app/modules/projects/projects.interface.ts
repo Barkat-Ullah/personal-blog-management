@@ -10,4 +10,5 @@ export type TProject = {
     name: string;
     icon: string;
   }[];
+  thumbnail:string
 };

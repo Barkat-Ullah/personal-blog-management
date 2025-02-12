@@ -25,10 +25,14 @@ const projectSchema = new Schema<TProject>(
       type: String,
       required: true,
     },
+    thumbnail: {
+      type: String,
+      required: true,
+    },
     technologies: [
       {
-        name: { type: String, required: true }, 
-        icon: { type: String, required: true }, 
+        name: { type: String },
+        icon: { type: String },
       },
     ],
   },
