@@ -19,31 +19,24 @@ const getSingleProject = async (id: string) => {
 const updateProject = async (
   id: string,
   payload: Partial<TProject>,
-  userId: string,
-  userRole: string,
+ 
 ) => {
   const project = await Project.findById(id);
   if (!project) {
     throw new AppError(404, 'Project not found');
   }
 
-  if (project.author.toString() !== userId && userRole !== 'admin') {
-    throw new AppError(403, 'Unauthorized: You can only edit your own Project');
-  }
-
   const result = await Project.findByIdAndUpdate(id, payload, { new: true });
   return result;
 };
 
-const deleteProject = async (id: string, userId: string, userRole: string) => {
+const deleteProject = async (id: string, ) => {
   const project = await Project.findById(id);
   if (!project) {
     throw new AppError(404, 'Project not found');
   }
 
-  if (project.author.toString() !== userId && userRole !== 'admin') {
-    throw new AppError(403, 'Unauthorized: You can only delete your own Project');
-  }
+
 
   const result = await Project.findByIdAndDelete(id);
   return result;

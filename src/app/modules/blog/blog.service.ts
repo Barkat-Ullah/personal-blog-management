@@ -18,30 +18,22 @@ const getSingleBlog = async (id: string) => {
 const updateBlog = async (
   id: string,
   payload: Partial<TBlog>,
-  userId: string,
-  userRole: string,
+
 ) => {
   const blog = await Blog.findById(id);
   if (!blog) {
     throw new AppError(404, 'Blog not found');
   }
 
-  if (blog?.author?.toString() !== userId && userRole !== 'admin') {
-    throw new AppError(403, 'Unauthorized: You can only edit your own blog');
-  }
 
   const result = await Blog.findByIdAndUpdate(id, payload, { new: true });
   return result;
 };
 
-const deleteBlog = async (id: string, userId: string, userRole: string) => {
+const deleteBlog = async (id: string, ) => {
   const blog = await Blog.findById(id);
   if (!blog) {
     throw new AppError(404, 'Blog not found');
-  }
-
-  if (blog.author.toString() !== userId && userRole !== 'admin') {
-    throw new AppError(403, 'Unauthorized: You can only delete your own blog');
   }
 
   const result = await Blog.findByIdAndDelete(id);

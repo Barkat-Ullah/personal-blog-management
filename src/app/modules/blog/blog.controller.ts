@@ -2,16 +2,13 @@ import { StatusCodes } from 'http-status-codes';
 import catchAsync from '../../utils/catchAsync';
 import { BlogService } from './blog.service';
 import { sendResponse } from '../../utils/sendResponse';
-import AppError from '../../error/AppError';
+
 
 
 const createBlog = catchAsync(async (req, res) => {
-  const user = req?.user;
-  
-  if (!user) {
-    throw new AppError(StatusCodes.UNAUTHORIZED, 'User not authenticated');
-  }
-  const blogData = { ...req?.body, author:user?.id};
+
+
+  const blogData = { ...req?.body,};
 
   const result = await BlogService.createBlog(blogData);
   sendResponse(res, {
@@ -32,9 +29,9 @@ const getBlogById = catchAsync(async (req, res) => {
 
 const updateBlog = catchAsync(async (req, res) => {
   const { id } = req.params;
-  const { _id, role } = req.user;
+ 
 
-  const result = await BlogService.updateBlog(id, req.body, _id, role);
+  const result = await BlogService.updateBlog(id, req.body );
   sendResponse(res, {
     statusCode: StatusCodes.OK,
     message: 'Blog updated successfully',
@@ -44,9 +41,9 @@ const updateBlog = catchAsync(async (req, res) => {
 
 const deleteBlog = catchAsync(async (req, res) => {
   const { id } = req.params;
-  const { _id, role } = req.user;
 
-  const result = await BlogService.deleteBlog(id, _id, role);
+
+  const result = await BlogService.deleteBlog(id,);
   sendResponse(res, {
     statusCode: StatusCodes.OK,
     message: 'Blog deleted successfully',
