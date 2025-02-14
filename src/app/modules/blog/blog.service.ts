@@ -8,7 +8,7 @@ const createBlog = async (payload: TBlog) => {
 };
 
 const getSingleBlog = async (id: string) => {
-  const result = await Blog.findById(id).populate('author', 'name email');
+  const result = await Blog.findById(id);
   if (!result) {
     throw new AppError(404, 'Blog not found');
   }
@@ -41,7 +41,7 @@ const deleteBlog = async (id: string, ) => {
 };
 
 const getAllBlogs = async () => {
-  const result = await Blog.find().populate('author', 'name email');
+  const result = await Blog.find();
   return result;
 };
 

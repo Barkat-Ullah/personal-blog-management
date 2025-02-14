@@ -3,12 +3,11 @@ import validateRequest from '../../middlewares/validateRequest';
 import { BlogValidation } from './blog.validation';
 import { BlogController } from './blog.controller';
 
-
 const router = express.Router();
 
 router.post(
   '/',
-  
+
   validateRequest(BlogValidation.createBlogValidationSchema),
   BlogController.createBlog,
 );
@@ -23,6 +22,6 @@ router.patch(
   BlogController.updateBlog,
 );
 
-router.delete('/:id',  BlogController.deleteBlog);
+router.delete('/:id', BlogController.deleteBlog);
 
 export const BlogRouter = router;

@@ -19,7 +19,7 @@ const blogSchema = new Schema<TBlog>(
     author: {
       type: Schema.Types.ObjectId,
       ref: 'User',
-      required: true,
+      
     },
     image: {
       type: String,

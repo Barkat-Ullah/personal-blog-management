@@ -3,12 +3,8 @@ import catchAsync from '../../utils/catchAsync';
 import { BlogService } from './blog.service';
 import { sendResponse } from '../../utils/sendResponse';
 
-
-
 const createBlog = catchAsync(async (req, res) => {
-
-
-  const blogData = { ...req?.body,};
+  const blogData = req.body;
 
   const result = await BlogService.createBlog(blogData);
   sendResponse(res, {
@@ -29,9 +25,8 @@ const getBlogById = catchAsync(async (req, res) => {
 
 const updateBlog = catchAsync(async (req, res) => {
   const { id } = req.params;
- 
 
-  const result = await BlogService.updateBlog(id, req.body );
+  const result = await BlogService.updateBlog(id, req.body);
   sendResponse(res, {
     statusCode: StatusCodes.OK,
     message: 'Blog updated successfully',
@@ -42,8 +37,7 @@ const updateBlog = catchAsync(async (req, res) => {
 const deleteBlog = catchAsync(async (req, res) => {
   const { id } = req.params;
 
-
-  const result = await BlogService.deleteBlog(id,);
+  const result = await BlogService.deleteBlog(id);
   sendResponse(res, {
     statusCode: StatusCodes.OK,
     message: 'Blog deleted successfully',

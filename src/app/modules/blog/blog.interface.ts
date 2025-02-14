@@ -4,7 +4,6 @@ export type TBlog = {
   title: string;
   content: string;
   category: 'Programming' | 'Education' | 'Science';
-
-  author: Types.ObjectId;
+  author?: Types.ObjectId;
   image?: string;
 };
