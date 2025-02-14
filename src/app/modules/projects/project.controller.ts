@@ -4,7 +4,7 @@ import { sendResponse } from '../../utils/sendResponse';
 import { ProjectService } from './project.service';
 
 const createProject = catchAsync(async (req, res) => {
-  const ProjectData = { ...req?.body };
+  const ProjectData = req.body;
 
   const result = await ProjectService.createProject(ProjectData);
   sendResponse(res, {

@@ -15,7 +15,6 @@ const projectSchema = new Schema<TProject>(
     author: {
       type: Schema.Types.ObjectId,
       ref: 'User',
-      required: true,
     },
     image: {
       type: String,

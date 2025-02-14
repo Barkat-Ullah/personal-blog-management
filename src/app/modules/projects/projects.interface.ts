@@ -4,7 +4,7 @@ export type TProject = {
   title: string;
   description: string;
   link: string;
-  author: Types.ObjectId;
+  author?: Types.ObjectId;
   image: string;
   technologies?: {
     name: string;
